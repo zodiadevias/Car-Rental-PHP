@@ -116,33 +116,30 @@ error_reporting(0);
               <h5><i class="fa fa-filter" aria-hidden="true"></i> Find Your Car </h5>
             </div>
             <div class="sidebar_filter">
-              <form action="#" method="get">
+              <form action="search-carresult.php" method="post">
                 <div class="form-group select">
-                  <select class="form-control">
-                    <option>Select Brand</option>
-
-                    <?php $sql = "SELECT * from  tblbrands ";
+                  <select class="form-control" name="brand">
+                    <option value="">Select Brand</option>
+                    <?php
+                    $sql = "SELECT * FROM tblbrands";
                     $query = $dbh->prepare($sql);
                     $query->execute();
                     $results = $query->fetchAll(PDO::FETCH_OBJ);
-                    $cnt = 1;
                     if ($query->rowCount() > 0) {
-                      foreach ($results as $result) {       ?>
+                      foreach ($results as $result) { ?>
                         <option value="<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->BrandName); ?></option>
                     <?php }
                     } ?>
-
                   </select>
                 </div>
                 <div class="form-group select">
-                  <select class="form-control">
-                    <option>Select Fuel Type</option>
+                  <select class="form-control" name="fueltype">
+                    <option value="">Select Fuel Type</option>
                     <option value="Petrol">Petrol</option>
                     <option value="Diesel">Diesel</option>
                     <option value="CNG">CNG</option>
                   </select>
                 </div>
-
                 <div class="form-group">
                   <button type="submit" class="btn btn-block"><i class="fa fa-search" aria-hidden="true"></i> Search Car</button>
                 </div>
@@ -156,14 +153,15 @@ error_reporting(0);
             </div>
             <div class="recent_addedcars">
               <ul>
-                <?php $sql = "SELECT tblvehicles.*,tblbrands.BrandName,tblbrands.id as bid  from tblvehicles join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand order by id desc limit 4";
+                <?php
+                //Get the 4 most recently added cars from the database
+                $sql = "SELECT tblvehicles.*,tblbrands.BrandName,tblbrands.id as bid  from tblvehicles join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand order by id desc limit 4";
                 $query = $dbh->prepare($sql);
                 $query->execute();
                 $results = $query->fetchAll(PDO::FETCH_OBJ);
                 $cnt = 1;
                 if ($query->rowCount() > 0) {
                   foreach ($results as $result) {  ?>
-
                     <li class="gray-bg">
                       <div class="recent_post_img"> <a href="vehicle-details.php?vhid=<?php echo htmlentities($result->id); ?>"><img src="admin/img/vehicleimages/<?php echo htmlentities($result->Vimage1); ?>" alt="image"></a> </div>
                       <div class="recent_post_title"> <a href="vehicle-details.php?vhid=<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->BrandName); ?> , <?php echo htmlentities($result->VehiclesTitle); ?></a>
@@ -172,7 +170,6 @@ error_reporting(0);
                     </li>
                 <?php }
                 } ?>
-
               </ul>
             </div>
           </div>
