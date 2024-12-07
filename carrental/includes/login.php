@@ -14,18 +14,22 @@ if (isset($_POST['login'])) {
     $currentpage = $_SERVER['REQUEST_URI'];
     echo "<script type='text/javascript'> document.location = '$currentpage'; </script>";
   } else {
+    $isFail = true;
+    $msg = "Invalid Credentials.";
 
-    echo "<script>alert('Invalid Credentials');</script>";
+    //echo "<script>alert('Invalid Credentials');</script>";
   }
 }
 
 ?>
 
-<div class="modal fade" id="loginform">
+<div class="modal fade" id="loginform" tabindex="-1" role="dialog">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
         <h3 class="modal-title">Login</h3>
       </div>
       <div class="modal-body">
@@ -34,21 +38,19 @@ if (isset($_POST['login'])) {
             <div class="col-md-12 col-sm-6">
               <form method="post">
                 <div class="form-group">
-                  <input type="email" class="form-control" name="email" placeholder="Email address*">
+                  <input type="email" class="form-control" name="email" placeholder="Email address" onclick="$('#loginmsg').html('')" required>
                 </div>
                 <div class="form-group">
-                  <input type="password" class="form-control" name="password" placeholder="Password*">
-                </div>
-                <div class="form-group checkbox">
-                  <input type="checkbox" id="remember">
-
+                  <input type="password" class="form-control" name="password" placeholder="Password" onclick="$('#loginmsg').html('')" required>
                 </div>
                 <div class="form-group">
+                  <?php if (!empty($msg)) { ?>
+                    <p id="loginmsg" style="color:red"><?= htmlspecialchars($msg); ?></p>
+                  <?php } ?>
                   <input type="submit" name="login" value="Login" class="btn btn-block">
                 </div>
               </form>
             </div>
-
           </div>
         </div>
       </div>

@@ -5,7 +5,7 @@ include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-
+	// Code for change image
 	if (isset($_POST['update'])) {
 		$vimage1 = $_FILES["img1"]["name"];
 		$id = intval($_GET['imgid']);

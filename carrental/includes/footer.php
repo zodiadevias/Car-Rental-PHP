@@ -1,4 +1,11 @@
 <?php
+/*
+This php script is used to add email to the subscriber table in the database. 
+When user click on the subscribe button, this script will be executed. 
+It first check if the email address already exist in the table, if yes it will show an alert message saying "Already Subscribed". 
+If not it will add the email address to the table and show an alert message saying "Subscribed successfully". 
+If something went wrong, it will show an alert message saying "Something went wrong. Please try again"
+*/
 if (isset($_POST['emailsubscibe'])) {
   $subscriberemail = $_POST['subscriberemail'];
   $sql = "SELECT SubscriberEmail FROM tblsubscribers WHERE SubscriberEmail=:subscriberemail";

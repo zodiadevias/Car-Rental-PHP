@@ -13,7 +13,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		$query->bindParam(':pagetype', $pagetype, PDO::PARAM_STR);
 		$query->bindParam(':pagedetails', $pagedetails, PDO::PARAM_STR);
 		$query->execute();
-		$msg = "Page data updated  successfully";
+		$msg = " Page data updated successfully";
 	}
 
 ?>
@@ -48,36 +48,30 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<!-- Admin Stye -->
 		<link rel="stylesheet" href="css/style.css">
 		<script type="text/JavaScript">
-			<!--
-function MM_findObj(n, d) { //v4.01
-  var p,i,x;  if(!d) d=document; if((p=n.indexOf("?"))>0&&parent.frames.length) {
-    d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);}
-  if(!(x=d[n])&&d.all) x=d.all[n]; for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
-  for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
-  if(!x && d.getElementById) x=d.getElementById(n); return x;
-}
 
-function MM_validateForm() { //v4.0
-  var i,p,q,nm,test,num,min,max,errors='',args=MM_validateForm.arguments;
-  for (i=0; i<(args.length-2); i+=3) { test=args[i+2]; val=MM_findObj(args[i]);
-    if (val) { nm=val.name; if ((val=val.value)!="") {
-      if (test.indexOf('isEmail')!=-1) { p=val.indexOf('@');
-        if (p<1 || p==(val.length-1)) errors+='- '+nm+' must contain an e-mail address.\n';
-      } else if (test!='R') { num = parseFloat(val);
-        if (isNaN(val)) errors+='- '+nm+' must contain a number.\n';
-        if (test.indexOf('inRange') != -1) { p=test.indexOf(':');
-          min=test.substring(8,p); max=test.substring(p+1);
-          if (num<min || max<num) errors+='- '+nm+' must contain a number between '+min+' and '+max+'.\n';
-    } } } else if (test.charAt(0) == 'R') errors += '- '+nm+' is required.\n'; }
-  } if (errors) alert('The following error(s) occurred:\n'+errors);
-  document.MM_returnValue = (errors == '');
-}
+			//This function is used to jump to a particular page when a selection is made from a dropdown menu.
+			//The function takes three parameters: the target of the jump (usually a frame or a window), the select object, and a boolean indicating whether the selection should be reset to the default value after the jump is made.
+			//The function works by evaluating a string that sets the location property of the target to the selected value of the select object.
+			//If the third parameter is true, the function then resets the selected index of the select object to 0, effectively resetting the selection to the default value.
+			//sa madaling salita, para to sa dropdown menu pag pipili ng page na gusto mo at iedit sa nice editor.
+			function MM_findObj(n, d) { 
+				var p,i,x;  
+				if(!d) d=document; 
+				if((p=n.indexOf("?"))>0&&parent.frames.length) {
+					d=parent.frames[n.substring(p+1)].document; n=n.substring(0,p);
+				}
+				if(!(x=d[n])&&d.all) x=d.all[n]; 
+				for (i=0;!x&&i<d.forms.length;i++) x=d.forms[i][n];
+				for(i=0;!x&&d.layers&&i<d.layers.length;i++) x=MM_findObj(n,d.layers[i].document);
+				if(!x && d.getElementById) x=d.getElementById(n); 
+				return x;
+			}
 
-function MM_jumpMenu(targ,selObj,restore){ //v3.0
-  eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
-  if (restore) selObj.selectedIndex=0;
-}
-//-->
+			function MM_jumpMenu(targ,selObj,restore){ 
+				eval(targ+".location='"+selObj.options[selObj.selectedIndex].value+"'");
+				if (restore) selObj.selectedIndex=0;
+			}
+
 		</script>
 		<script type="text/javascript" src="nicEdit.js"></script>
 		<script type="text/javascript">
@@ -128,15 +122,31 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 											<form method="post" name="chngpwd" class="form-horizontal" onSubmit="return valid();">
 
 
-												<?php if ($error) { ?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } else if ($msg) { ?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
+												<?php
+												// Check if there's an error message to display
+												if ($error): ?>
+													<div class="errorWrap">
+														<strong>ERROR</strong>: <?php echo htmlentities($error); // Output the error 
+																				?>
+													</div>
+												<?php
+												// Otherwise, check if there's a success message to display
+												elseif ($msg): ?>
+													<div class="succWrap">
+														<strong>SUCCESS</strong>: <?php echo htmlentities($msg); // Output the success message 
+																					?>
+													</div>
+												<?php endif; // End of the conditional block 
+												?>
+
 												<div class="form-group">
-													<label class="col-sm-4 control-label">select Page</label>
+													<label class="col-sm-4 control-label">Select Page</label>
 													<div class="col-sm-8">
 														<select name="menu1" onChange="MM_jumpMenu('parent',this,0)">
 															<option value="" selected="selected" class="form-control">***Select One***</option>
-															<option value="manage-pages.php?type=terms">terms and condition</option>
-															<option value="manage-pages.php?type=privacy">privacy and policy</option>
-															<option value="manage-pages.php?type=aboutus">aboutus</option>
+															<option value="manage-pages.php?type=terms">Terms and Conditions</option>
+															<option value="manage-pages.php?type=privacy">Privacy and Policy</option>
+															<option value="manage-pages.php?type=aboutus">About Us</option>
 															<option value="manage-pages.php?type=faqs">FAQs</option>
 														</select>
 													</div>
@@ -144,7 +154,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 												<div class="hr-dashed"></div>
 
 												<div class="form-group">
-													<label class="col-sm-4 control-label">selected Page</label>
+													<label class="col-sm-4 control-label">Selected Page</label>
 													<div class="col-sm-8">
 														<?php
 
@@ -158,7 +168,7 @@ function MM_jumpMenu(targ,selObj,restore){ //v3.0
 																break;
 
 															case "aboutus":
-																echo "About US";
+																echo "About Us";
 																break;
 
 															case "faqs":

@@ -27,10 +27,6 @@ if (strlen($_SESSION['login']) == 0) {
     <link href="assets/css/font-awesome.min.css" rel="stylesheet">
 
     <!-- Fav and touch icons -->
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/images/favicon-icon/apple-touch-icon-144-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/images/favicon-icon/apple-touch-icon-114-precomposed.html">
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="assets/images/favicon-icon/apple-touch-icon-72-precomposed.png">
-    <link rel="apple-touch-icon-precomposed" href="assets/images/favicon-icon/apple-touch-icon-57-precomposed.png">
     <link rel="shortcut icon" href="assets/images/favicon-icon/favicon.png">
     <!-- Google-Font-->
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900" rel="stylesheet">
@@ -80,7 +76,7 @@ if (strlen($_SESSION['login']) == 0) {
         <section class="user_profile inner_pages">
           <div class="container">
             <div class="user_profile_info gray-bg padding_4x4_40">
-              <div class="upload_user_logo"> <img src="assets/images/dealer-logo.jpg" alt="image">
+              <div class="upload_user_logo"> <img src="assets/images/dealer-logo.jpg" alt="image"> <!-- dealer-logo -->
               </div>
 
               <div class="dealer_info">
@@ -102,7 +98,7 @@ if (strlen($_SESSION['login']) == 0) {
                       <ul class="vehicle_listing">
                         <?php
                         $useremail = $_SESSION['login'];
-                        $sql = "SELECT tblvehicles.Vimage1 as Vimage1,tblvehicles.VehiclesTitle,tblvehicles.id as vid,tblbrands.BrandName,tblbooking.FromDate,tblbooking.ToDate,tblbooking.message,tblbooking.Status,tblvehicles.PricePerDay,DATEDIFF(tblbooking.ToDate,tblbooking.FromDate) as totaldays,tblbooking.BookingNumber  from tblbooking join tblvehicles on tblbooking.VehicleId=tblvehicles.id join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand where tblbooking.userEmail=:useremail order by tblbooking.id desc";
+                        $sql = "SELECT tblvehicles.Vimage1 as Vimage1, tblvehicles.VehiclesTitle, tblvehicles.id as vid, tblbrands.BrandName, tblbooking.FromDate, tblbooking.ToDate, tblbooking.message, tblbooking.Status, tblvehicles.PricePerDay, (DATEDIFF(tblbooking.ToDate, tblbooking.FromDate) + 1) as totaldays, tblbooking.BookingNumber from tblbooking join tblvehicles on tblbooking.VehicleId=tblvehicles.id join tblbrands on tblbrands.id=tblvehicles.VehiclesBrand where tblbooking.userEmail=:useremail order by tblbooking.id desc";
                         $query = $dbh->prepare($sql);
                         $query->bindParam(':useremail', $useremail, PDO::PARAM_STR);
                         $query->execute();
