@@ -5,13 +5,14 @@ include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-	if (isset($_GET['del'])) {
-		$id = $_GET['del'];
-		$sql = "delete from tblbrands  WHERE id=:id";
+	if (isset($_REQUEST['eid'])) {
+		$eid = intval($_GET['eid']);
+		$status = 1;
+		$sql = "UPDATE tblcontactusquery SET status=:status WHERE  id=:eid";
 		$query = $dbh->prepare($sql);
-		$query->bindParam(':id', $id, PDO::PARAM_STR);
+		$query->bindParam(':status', $status, PDO::PARAM_STR);
+		$query->bindParam(':eid', $eid, PDO::PARAM_STR);
 		$query->execute();
-		$msg = "Page data updated  successfully";
 	}
 
 
@@ -29,7 +30,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<meta name="author" content="">
 		<meta name="theme-color" content="#3e454c">
 
-		<title>WE-GO! Car Rental |Admin Manage Registered Users </title>
+		<title>WE-GO! Car Rental |Admin Manage Queries </title>
 
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="css/font-awesome.min.css">
@@ -80,45 +81,40 @@ if (strlen($_SESSION['alogin']) == 0) {
 					<div class="row">
 						<div class="col-md-12">
 
-							<h2 class="page-title">Registered Users</h2>
+							<h2 class="page-title">Manage Contact Us Queries</h2>
 
 							<!-- Zero Configuration Table -->
 							<div class="panel panel-default">
-								<div class="panel-heading">Reg Users</div>
+								<div class="panel-heading">User queries</div>
 								<div class="panel-body">
-									<?php if ($error) { ?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } else if ($msg) { ?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
+
 									<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th>#</th>
-												<th> Name</th>
-												<th>Email </th>
-												<th>Contact no</th>
-												<th>DOB</th>
-												<th>Address</th>
-												<th>City</th>
-												<th>Country</th>
-												<th>Reg Date</th>
-
+												<th>Name</th>
+												<th>Email</th>
+												<th>Contact No</th>
+												<th>Message</th>
+												<th>Posting date</th>
+												<th>Action</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												<th>#</th>
-												<th> Name</th>
-												<th>Email </th>
-												<th>Contact no</th>
-												<th>DOB</th>
-												<th>Address</th>
-												<th>City</th>
-												<th>Country</th>
-												<th>Reg Date</th>
+												<th>Name</th>
+												<th>Email</th>
+												<th>Contact No</th>
+												<th>Message</th>
+												<th>Posting date</th>
+												<th>Action</th>
 											</tr>
 											</tr>
 										</tfoot>
 										<tbody>
 
-											<?php $sql = "SELECT * from  tblusers ";
+											<?php $sql = "SELECT * from  tblcontactusquery ";
 											$query = $dbh->prepare($sql);
 											$query->execute();
 											$results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -127,14 +123,18 @@ if (strlen($_SESSION['alogin']) == 0) {
 												foreach ($results as $result) {				?>
 													<tr>
 														<td><?php echo htmlentities($cnt); ?></td>
-														<td><?php echo htmlentities($result->FullName); ?></td>
+														<td><?php echo htmlentities($result->name); ?></td>
 														<td><?php echo htmlentities($result->EmailId); ?></td>
-														<td><?php echo htmlentities($result->ContactNo); ?></td>
-														<td><?php echo htmlentities($result->dob); ?></td>
-														<td><?php echo htmlentities($result->Address); ?></td>
-														<td><?php echo htmlentities($result->City); ?></td>
-														<td><?php echo htmlentities($result->Country); ?></td>
-														<td><?php echo htmlentities($result->RegDate); ?></td>
+														<td><?php echo htmlentities($result->ContactNumber); ?></td>
+														<td><?php echo htmlentities($result->Message); ?></td>
+														<td><?php echo htmlentities($result->PostingDate); ?></td>
+														<?php if ($result->status == 1) {
+														?><td>Read</td>
+														<?php } else { ?>
+
+															<td><a href="manage-contactusquery.php?eid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Do you really want to read')">Pending</a>
+															</td>
+														<?php } ?>
 													</tr>
 											<?php $cnt = $cnt + 1;
 												}

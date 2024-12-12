@@ -174,7 +174,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 														<div class="stat-panel-title text-uppercase">Queries</div>
 													</div>
 												</div>
-												<a href="manage-conactusquery.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+												<a href="manage-contactusquery.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
 											</div>
 										</div>
 										<div class="col-md-3">
@@ -190,7 +190,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 														?>
 
 														<div class="stat-panel-number h1 "><?php echo htmlentities($testimonials); ?></div>
-														<div class="stat-panel-title text-uppercase">Testimonials</div>
+														<div class="stat-panel-title text-uppercase">Feedbacks</div>
 													</div>
 												</div>
 												<a href="testimonials.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>

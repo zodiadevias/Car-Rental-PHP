@@ -5,15 +5,31 @@ include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-	if (isset($_GET['del'])) {
-		$id = $_GET['del'];
-		$sql = "delete from tblbrands  WHERE id=:id";
+	if (isset($_REQUEST['eid'])) {
+		$eid = intval($_GET['eid']);
+		$status = "0";
+		$sql = "UPDATE tbltestimonial SET status=:status WHERE  id=:eid";
 		$query = $dbh->prepare($sql);
-		$query->bindParam(':id', $id, PDO::PARAM_STR);
+		$query->bindParam(':status', $status, PDO::PARAM_STR);
+		$query->bindParam(':eid', $eid, PDO::PARAM_STR);
 		$query->execute();
-		$msg = "Page data updated  successfully";
+
+		$msg = "Feedback Successfully Inactive";
 	}
 
+
+	if (isset($_REQUEST['aeid'])) {
+		$aeid = intval($_GET['aeid']);
+		$status = 1;
+
+		$sql = "UPDATE tbltestimonial SET status=:status WHERE  id=:aeid";
+		$query = $dbh->prepare($sql);
+		$query->bindParam(':status', $status, PDO::PARAM_STR);
+		$query->bindParam(':aeid', $aeid, PDO::PARAM_STR);
+		$query->execute();
+
+		$msg = "Feedback Successfully Active";
+	}
 
 
 ?>
@@ -29,7 +45,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<meta name="author" content="">
 		<meta name="theme-color" content="#3e454c">
 
-		<title>WE-GO! Car Rental |Admin Manage Registered Users </title>
+		<title>WE-GO! Car Rental |Admin Manage Feedbacks </title>
 
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="css/font-awesome.min.css">
@@ -80,45 +96,37 @@ if (strlen($_SESSION['alogin']) == 0) {
 					<div class="row">
 						<div class="col-md-12">
 
-							<h2 class="page-title">Registered Users</h2>
+							<h2 class="page-title">Manage Feedbacks</h2>
 
 							<!-- Zero Configuration Table -->
 							<div class="panel panel-default">
-								<div class="panel-heading">Reg Users</div>
+								<div class="panel-heading">User Feedbacks</div>
 								<div class="panel-body">
 									<?php if ($error) { ?><div class="errorWrap"><strong>ERROR</strong>:<?php echo htmlentities($error); ?> </div><?php } else if ($msg) { ?><div class="succWrap"><strong>SUCCESS</strong>:<?php echo htmlentities($msg); ?> </div><?php } ?>
 									<table id="zctb" class="display table table-striped table-bordered table-hover" cellspacing="0" width="100%">
 										<thead>
 											<tr>
 												<th>#</th>
-												<th> Name</th>
-												<th>Email </th>
-												<th>Contact no</th>
-												<th>DOB</th>
-												<th>Address</th>
-												<th>City</th>
-												<th>Country</th>
-												<th>Reg Date</th>
-
+												<th>Name</th>
+												<th>Email</th>
+												<th>Feedback</th>
+												<th>Posting date</th>
+												<th>Action</th>
 											</tr>
 										</thead>
 										<tfoot>
 											<tr>
 												<th>#</th>
-												<th> Name</th>
-												<th>Email </th>
-												<th>Contact no</th>
-												<th>DOB</th>
-												<th>Address</th>
-												<th>City</th>
-												<th>Country</th>
-												<th>Reg Date</th>
-											</tr>
+												<th>Name</th>
+												<th>Email</th>
+												<th>Feedback</th>
+												<th>Posting date</th>
+												<th>Action</th>
 											</tr>
 										</tfoot>
 										<tbody>
 
-											<?php $sql = "SELECT * from  tblusers ";
+											<?php $sql = "SELECT tblusers.FullName,tbltestimonial.UserEmail,tbltestimonial.Testimonial,tbltestimonial.PostingDate,tbltestimonial.status,tbltestimonial.id from tbltestimonial join tblusers on tblusers.Emailid=tbltestimonial.UserEmail";
 											$query = $dbh->prepare($sql);
 											$query->execute();
 											$results = $query->fetchAll(PDO::FETCH_OBJ);
@@ -128,13 +136,16 @@ if (strlen($_SESSION['alogin']) == 0) {
 													<tr>
 														<td><?php echo htmlentities($cnt); ?></td>
 														<td><?php echo htmlentities($result->FullName); ?></td>
-														<td><?php echo htmlentities($result->EmailId); ?></td>
-														<td><?php echo htmlentities($result->ContactNo); ?></td>
-														<td><?php echo htmlentities($result->dob); ?></td>
-														<td><?php echo htmlentities($result->Address); ?></td>
-														<td><?php echo htmlentities($result->City); ?></td>
-														<td><?php echo htmlentities($result->Country); ?></td>
-														<td><?php echo htmlentities($result->RegDate); ?></td>
+														<td><?php echo htmlentities($result->UserEmail); ?></td>
+														<td><?php echo htmlentities($result->Testimonial); ?></td>
+														<td><?php echo htmlentities($result->PostingDate); ?></td>
+														<td><?php if ($result->status == "" || $result->status == 0) {
+															?><a href="feedbacks.php?aeid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Do you really want to Active')"> Inactive</a>
+															<?php } else { ?>
+
+																<a href="feedbacks.php?eid=<?php echo htmlentities($result->id); ?>" onclick="return confirm('Do you really want to Inactive')"> Active</a>
+														</td>
+													<?php } ?></td>
 													</tr>
 											<?php $cnt = $cnt + 1;
 												}

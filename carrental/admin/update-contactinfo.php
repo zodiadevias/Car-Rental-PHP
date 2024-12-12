@@ -5,7 +5,7 @@ include('includes/config.php');
 if (strlen($_SESSION['alogin']) == 0) {
 	header('location:index.php');
 } else {
-	// Code for change password	
+	// Code for change contact info
 	if (isset($_POST['submit'])) {
 		$address = $_POST['address'];
 		$email = $_POST['email'];
@@ -31,7 +31,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<meta name="author" content="">
 		<meta name="theme-color" content="#3e454c">
 
-		<title>WE-GO! Car Rental | Admin Create Brand</title>
+		<title>WE-GO! Car Rental | Admin Contact Info</title>
 
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="css/font-awesome.min.css">

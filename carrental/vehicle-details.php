@@ -32,15 +32,14 @@ if (isset($_POST['submit'])) {
     $query->execute();
     $lastInsertId = $dbh->lastInsertId();
     if ($lastInsertId) {
-      echo "<script>alert('Booking successfull.');</script>";
+      echo "<script>alert('Booking successful.');</script>";
       echo "<script type='text/javascript'> document.location = 'my-booking.php'; </script>";
     } else {
       echo "<script>alert('Something went wrong. Please try again');</script>";
       echo "<script type='text/javascript'> document.location = 'car-listing.php'; </script>";
     }
   } else {
-    echo "<script>alert('Car already booked for these days');</script>";
-    echo "<script type='text/javascript'> document.location = 'car-listing.php'; </script>";
+    $msg = "Sorry, the vehicle is already reserved for these dates!";
   }
 }
 
@@ -311,17 +310,21 @@ if (isset($_POST['submit'])) {
               </div>
               <div class="sidebar_widget">
                 <div class="widget_heading">
+                  <?php if (!empty($msg)) { ?>
+                    <p id="errmsg" style="color:red"><?= htmlspecialchars($msg); ?></p>
+                  <?php } ?>
                   <h5><i class="fa fa-envelope" aria-hidden="true"></i>Book Now</h5>
                 </div>
-                <form method="post">
+                <form method="post" id="bookingForm">
                   <div class="form-group">
                     <label>From Date:</label>
-                    <input type="date" class="form-control" name="fromdate" placeholder="From Date" required>
+                    <input type="date" class="form-control" name="fromdate" id="fromdate" required>
                   </div>
                   <div class="form-group">
                     <label>To Date:</label>
-                    <input type="date" class="form-control" name="todate" placeholder="To Date" required>
+                    <input type="date" class="form-control" name="todate" id="todate" required>
                   </div>
+                  <div id="date-error" style="color: red; display: none;"></div>
                   <div class="form-group">
                     <textarea rows="4" class="form-control" name="message" placeholder="Message" required></textarea>
                   </div>
@@ -330,10 +333,10 @@ if (isset($_POST['submit'])) {
                       <input type="submit" class="btn" name="submit" value="Book Now">
                     </div>
                   <?php } else { ?>
-                    <a href="#loginform" class="btn btn-xs uppercase" data-toggle="modal" data-dismiss="modal">Login For Book</a>
-
+                    <a href="#loginform" class="btn btn-xs uppercase" data-toggle="modal" data-dismiss="modal">Login to Book</a>
                   <?php } ?>
                 </form>
+
               </div>
             </aside>
             <!--/Side-Bar-->
@@ -410,6 +413,43 @@ if (isset($_POST['submit'])) {
       <script src="assets/js/bootstrap-slider.min.js"></script>
       <script src="assets/js/slick.min.js"></script>
       <script src="assets/js/owl.carousel.min.js"></script>
+
+
+      <script>
+        $(document).ready(function() {
+          $('#fromdate, #todate').on('change', function() {
+            const fromdate = $('#fromdate').val();
+            const todate = $('#todate').val();
+            const vhid = "<?php echo intval($_GET['vhid']); ?>";
+
+            if (fromdate && todate) {
+              $.ajax({
+                url: 'validate-dates.php',
+                type: 'POST',
+                data: {
+                  fromdate: fromdate,
+                  todate: todate,
+                  vhid: vhid
+                },
+                dataType: 'json',
+                success: function(response) {
+                  if (response.status === 'error') {
+                    $('#date-error').text(response.message).show();
+                    $('input[type="submit"]').prop('disabled', true);
+                  } else {
+                    $('#date-error').hide();
+                    $('input[type="submit"]').prop('disabled', false);
+                  }
+                },
+                error: function() {
+                  $('#date-error').text('An error occurred while validating dates.').show();
+                }
+              });
+            }
+          });
+        });
+      </script>
+
 
 </body>
 

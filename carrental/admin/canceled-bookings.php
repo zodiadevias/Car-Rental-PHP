@@ -19,7 +19,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<meta name="author" content="">
 		<meta name="theme-color" content="#3e454c">
 
-		<title>WE-GO! Car Rental | Canceled Bookings </title>
+		<title>WE-GO! Car Rental | Cancelled Bookings </title>
 
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="css/font-awesome.min.css">
@@ -137,7 +137,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 														<td>
 
 
-															<a href="bookig-details.php?bid=<?php echo htmlentities($result->id); ?>"> View</a>
+															<a href="booking-details.php?bid=<?php echo htmlentities($result->id); ?>"> View</a>
 														</td>
 
 													</tr>

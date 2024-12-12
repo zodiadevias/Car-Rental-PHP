@@ -131,7 +131,8 @@ if (strlen($_SESSION['login']) == 0) {
 
 
                               <?php } else { ?>
-                                <div class="vehicle_status"> <a href="#" class="btn outline btn-xs">Not Confirm yet</a>
+                                <div class="vehicle_status"> <a href="#" class="btn outline btn-xs">Not Confirmed yet</a>
+                                  <a href="cancel-booking.php?bookingno=<?php echo $result->BookingNumber; ?>" onclick="return confirm('Are you sure you want to cancel this booking?');" class="btn outline btn-xs">Cancel Booking</a>
                                   <div class="clearfix"></div>
                                 </div>
                               <?php } ?>

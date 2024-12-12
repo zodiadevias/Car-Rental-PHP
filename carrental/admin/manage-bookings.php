@@ -45,7 +45,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 		<meta name="author" content="">
 		<meta name="theme-color" content="#3e454c">
 
-		<title>WE-GO! Car Rental |Admin Manage testimonials </title>
+		<title>WE-GO! Car Rental |Admin Manage Bookings </title>
 
 		<!-- Font awesome -->
 		<link rel="stylesheet" href="css/font-awesome.min.css">
