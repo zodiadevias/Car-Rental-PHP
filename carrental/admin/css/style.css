@@ -731,6 +731,7 @@ li {
   margin-top: 60px;
 }
 @media only screen and (min-width: 992px) {
+  
   .ts-main-content .ts-sidebar {
     width: 250px;
     float: left;
@@ -745,3 +746,4 @@ li {
   height: 100%;
   width: 100%;
 }
+

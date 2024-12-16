@@ -79,12 +79,12 @@ error_reporting(0);
           $results = $query->fetchAll(PDO::FETCH_OBJ);
           $cnt = 1;
           if ($query->rowCount() > 0) {
-            foreach ($results as $result) {  ?>
+            foreach (array_reverse($results) as $result) {  ?>
               <div class="product-listing-m gray-bg">
                 <div class="product-listing-img"><img src="admin/img/vehicleimages/<?php echo htmlentities($result->Vimage1); ?>" class="img-responsive" alt="Image" /> </a>
                 </div>
                 <div class="product-listing-content">
-                  <h5><a href="vehicle-details.php?vhid=<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->BrandName); ?> , <?php echo htmlentities($result->VehiclesTitle); ?></a></h5>
+                  <h5><a href="vehicle-details.php?vhid=<?php echo htmlentities($result->id); ?>"><?php echo htmlentities($result->VehiclesTitle); ?></a></h5>
                   <p class="list-price">PHP <?php echo htmlentities($result->PricePerDay); ?> Per Day</p>
                   <ul>
                     <li><i class="fa fa-user" aria-hidden="true"></i><?php echo htmlentities($result->SeatingCapacity); ?> seats</li>

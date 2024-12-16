@@ -14,7 +14,8 @@ if (isset($_POST['signup'])) {
   $query->execute();
   $lastInsertId = $dbh->lastInsertId();
   if ($lastInsertId) {
-    echo "<script>alert('Registration successfull. Now you can login');</script>";
+
+    echo "<script>alert('Registration successful. Now you can login');</script>";
   } else {
     echo "<script>alert('Something went wrong. Please try again');</script>";
   }
@@ -22,17 +23,16 @@ if (isset($_POST['signup'])) {
 
 ?>
 
-
 <script>
   function checkAvailability() {
-    $("#loaderIcon").show();
+    //$("#loaderIcon").show();
     jQuery.ajax({
       url: "check_availability.php",
       data: 'emailid=' + $("#emailid").val(),
       type: "POST",
       success: function(data) {
         $("#user-availability-status").html(data);
-        $("#loaderIcon").hide();
+        // $("#loaderIcon").hide();
       },
       error: function() {}
     });

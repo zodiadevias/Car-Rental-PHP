@@ -18,28 +18,26 @@ if (isset($_POST['submit'])) {
   $query1->execute();
   $results1 = $query1->fetchAll(PDO::FETCH_OBJ);
 
-  if ($query1->rowCount() == 0) {
 
-    $sql = "INSERT INTO  tblbooking(BookingNumber,userEmail,VehicleId,FromDate,ToDate,message,Status) VALUES(:bookingno,:useremail,:vhid,:fromdate,:todate,:message,:status)";
-    $query = $dbh->prepare($sql);
-    $query->bindParam(':bookingno', $bookingno, PDO::PARAM_STR);
-    $query->bindParam(':useremail', $useremail, PDO::PARAM_STR);
-    $query->bindParam(':vhid', $vhid, PDO::PARAM_STR);
-    $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
-    $query->bindParam(':todate', $todate, PDO::PARAM_STR);
-    $query->bindParam(':message', $message, PDO::PARAM_STR);
-    $query->bindParam(':status', $status, PDO::PARAM_STR);
-    $query->execute();
-    $lastInsertId = $dbh->lastInsertId();
-    if ($lastInsertId) {
-      echo "<script>alert('Booking successful.');</script>";
-      echo "<script type='text/javascript'> document.location = 'my-booking.php'; </script>";
-    } else {
-      echo "<script>alert('Something went wrong. Please try again');</script>";
-      echo "<script type='text/javascript'> document.location = 'car-listing.php'; </script>";
-    }
+
+  $sql = "INSERT INTO  tblbooking(BookingNumber,userEmail,VehicleId,FromDate,ToDate,message,Status) VALUES(:bookingno,:useremail,:vhid,:fromdate,:todate,:message,:status)";
+  $query = $dbh->prepare($sql);
+  $query->bindParam(':bookingno', $bookingno, PDO::PARAM_STR);
+  $query->bindParam(':useremail', $useremail, PDO::PARAM_STR);
+  $query->bindParam(':vhid', $vhid, PDO::PARAM_STR);
+  $query->bindParam(':fromdate', $fromdate, PDO::PARAM_STR);
+  $query->bindParam(':todate', $todate, PDO::PARAM_STR);
+  $query->bindParam(':message', $message, PDO::PARAM_STR);
+  $query->bindParam(':status', $status, PDO::PARAM_STR);
+  $query->execute();
+  $lastInsertId = $dbh->lastInsertId();
+
+  if ($lastInsertId) {
+    echo "<script>alert('Booking successful.');</script>";
+    echo "<script type='text/javascript'> document.location = 'my-booking.php'; </script>";
   } else {
-    $msg = "Sorry, the vehicle is already reserved for these dates!";
+    echo "<script>alert('Something went wrong. Please try again');</script>";
+    echo "<script type='text/javascript'> document.location = 'car-listing.php'; </script>";
   }
 }
 
@@ -305,14 +303,14 @@ if (isset($_POST['submit'])) {
             <!--Side-Bar-->
             <aside class="col-md-3">
 
-              <div class="share_vehicle">
-                <p>Share: <a href="#"><i class="fa fa-facebook-square" aria-hidden="true"></i></a> <a href="#"><i class="fa fa-twitter-square" aria-hidden="true"></i></a> <a href="#"><i class="fa fa-linkedin-square" aria-hidden="true"></i></a> <a href="#"><i class="fa fa-google-plus-square" aria-hidden="true"></i></a> </p>
-              </div>
+
               <div class="sidebar_widget">
                 <div class="widget_heading">
                   <?php if (!empty($msg)) { ?>
                     <p id="errmsg" style="color:red"><?= htmlspecialchars($msg); ?></p>
                   <?php } ?>
+
+
                   <h5><i class="fa fa-envelope" aria-hidden="true"></i>Book Now</h5>
                 </div>
                 <form method="post" id="bookingForm">
@@ -327,6 +325,12 @@ if (isset($_POST['submit'])) {
                   <div id="date-error" style="color: red; display: none;"></div>
                   <div class="form-group">
                     <textarea rows="4" class="form-control" name="message" placeholder="Message" required></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label>Total Days:</label>
+                    <p id="total-days" style="font-weight: bold;">0 Day/s</p>
+                    <label>Total Payment:</label>
+                    <p id="total-payment" style="font-weight: bold;">PHP 0</p>
                   </div>
                   <?php if ($_SESSION['login']) { ?>
                     <div class="form-group">
@@ -417,9 +421,17 @@ if (isset($_POST['submit'])) {
 
       <script>
         $(document).ready(function() {
+          const pricePerDay = Number(<?php echo htmlentities($result->PricePerDay); ?>) || 0;
+
           $('#fromdate, #todate').on('change', function() {
             const fromdate = $('#fromdate').val();
             const todate = $('#todate').val();
+            console.log({
+              fromdate,
+              todate
+            }); // Debugging: Check input values
+            const days = Math.floor(Math.abs((new Date(todate) - new Date(fromdate)) / (1000 * 60 * 60 * 24))) + 1;
+
             const vhid = "<?php echo intval($_GET['vhid']); ?>";
 
             if (fromdate && todate) {
@@ -433,14 +445,25 @@ if (isset($_POST['submit'])) {
                 },
                 dataType: 'json',
                 success: function(response) {
+                  console.log(response); // Debugging: Check what the server returns
+
                   if (response.status === 'error') {
                     $('#date-error').text(response.message).show();
                     $('input[type="submit"]').prop('disabled', true);
+                    $('#total-payment').text('PHP 0'); // Reset total payment
                   } else {
                     $('#date-error').hide();
                     $('input[type="submit"]').prop('disabled', false);
+
+                    // Ensure response.days is a number
+                    const totalDays = Number(days);
+                    const totalPayment = totalDays * pricePerDay;
+
+                    $('#total-payment').text(`PHP ${totalPayment.toLocaleString()}`);
+                    $('#total-days').text(`${totalDays.toLocaleString()} Day's`);
                   }
                 },
+
                 error: function() {
                   $('#date-error').text('An error occurred while validating dates.').show();
                 }

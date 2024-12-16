@@ -72,7 +72,7 @@ error_reporting(0);
             $results = $query->fetchAll(PDO::FETCH_OBJ);
             $cnt = 1;
             if ($query->rowCount() > 0) {
-              foreach ($results as $result) {
+              foreach (array_reverse($results) as $result) {
             ?>
 
                 <div class="col-list-3">

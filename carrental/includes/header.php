@@ -37,8 +37,6 @@
             ?>
               <div class="login_btn"> <a href="#loginform" class="btn btn-xs uppercase" data-toggle="modal" data-dismiss="modal">Login / Register</a> </div>
             <?php } else {
-
-              echo "Welcome, " . $_SESSION['login'];
             } ?>
           </div>
         </div>
@@ -77,8 +75,8 @@
                   <li><a href="profile.php">Profile Settings</a></li>
                   <li><a href="update-password.php">Update Password</a></li>
                   <li><a href="my-booking.php">My Booking</a></li>
-                  <li><a href="post-testimonial.php">Post a Testimonial</a></li>
-                  <li><a href="my-testimonials.php">My Testimonial</a></li>
+                  <li><a href="post-feedback.php">Post a Review</a></li>
+                  <li><a href="my-feedbacks.php">My Reviews</a></li>
                   <li><a href="logout.php">Sign Out</a></li>
                 </ul>
 
@@ -111,3 +109,11 @@
   <!-- Navigation end -->
 
 </header>
+<?php
+if (!$_SESSION['login']) { ?>
+  <script>
+    window.onload = function() {
+      $("#loginform").modal('show');
+    }
+  </script>
+<?php } ?>

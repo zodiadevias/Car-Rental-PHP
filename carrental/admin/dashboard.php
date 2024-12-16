@@ -193,7 +193,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 														<div class="stat-panel-title text-uppercase">Feedbacks</div>
 													</div>
 												</div>
-												<a href="testimonials.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
+												<a href="feedbacks.php" class="block-anchor panel-footer text-center">Full Detail &nbsp; <i class="fa fa-arrow-right"></i></a>
 											</div>
 										</div>
 
