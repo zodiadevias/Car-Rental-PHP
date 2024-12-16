@@ -153,7 +153,7 @@ if (strlen($_SESSION['alogin']) == 0) {
 														$subscribers = $query4->rowCount();
 														?>
 														<div class="stat-panel-number h1 "><?php echo htmlentities($subscribers); ?></div>
-														<div class="stat-panel-title text-uppercase">Subscibers</div>
+														<div class="stat-panel-title text-uppercase">Subscribers</div>
 													</div>
 												</div>
 												<a href="manage-subscribers.php" class="block-anchor panel-footer">Full Detail <i class="fa fa-arrow-right"></i></a>

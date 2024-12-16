@@ -14,8 +14,6 @@ if (isset($_POST['signup'])) {
   $query->execute();
   $lastInsertId = $dbh->lastInsertId();
   if ($lastInsertId) {
-
-    echo "<script>alert('Registration successful. Now you can login');</script>";
   } else {
     echo "<script>alert('Something went wrong. Please try again');</script>";
   }
